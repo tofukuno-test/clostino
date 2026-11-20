@@ -1,0 +1,48 @@
+/* ===========================================
+   Clostino - カスタムスタイル
+   =========================================== */
+
+/* CSS Variables */
+:root {
+  --primary-color: #1a1a2e;
+  --primary-hover: #16213e;
+  --accent-color: #e94560;
+  --accent-hover: #d63d56;
+  --success-color: #06d6a0;
+  --warning-color: #ffd166;
+  --text-dark: #1a1a2e;
+  --text-muted: #6c757d;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  --border-color: #e9ecef;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --border-radius: 8px;
+  --border-radius-lg: 16px;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    Meiryo, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+}
+
+main {
+  flex: 1;
+}
+.product-description {
+  min-height: 3em;
+}
