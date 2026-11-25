@@ -28,3 +28,8 @@ FROM (
 ) AS seed(name, price, description, image_url, stock)
 -- WHERE NOT EXISTS: productsに1件でも存在する場合はSELECT結果を0件にして、INSERTをスキップする。
 WHERE NOT EXISTS (SELECT 1 FROM products);
+-- テストユーザーの追加
+-- パスワードは「password123」をBCryptでハッシュ化したもの
+INSERT INTO users (email, password, name, address, created_at) VALUES
+('test@example.com', '$2a$10$4eN6fRgGeuFnj3iJRcS64eaNiOgteHr5A0YO3LmTlEyHfSL2aVu72', 'テストユーザー', '東京都渋谷区1-1-1', CURRENT_TIMESTAMP),
+('tanaka@example.com', '$2a$10$4eN6fRgGeuFnj3iJRcS64eaNiOgteHr5A0YO3LmTlEyHfSL2aVu72', '田中太郎', '大阪府大阪市2-2-2', CURRENT_TIMESTAMP);

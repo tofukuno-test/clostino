@@ -1,33 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8" />
 </head>
 
 <body>
-    <!-- ヘッダーフラグメント -->
-    <nav th:fragment="header" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" th:href="@{/}">Clostino</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/products}">商品一覧</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/cart}">カート</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders}">注文履歴</a>
-                    </li>
-                </ul>
+    <header th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+            <div class="container">
+                <a class="navbar-brand" th:href="@{/}">Clostino</a>
+                <div class="collapse navbar-collapse align-items-center" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/products}">商品一覧</a>
+                        </li>
+                        <!-- ログイン済みのみ表示 -->
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link" th:href="@{/orders}">注文履歴</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        <!-- ログイン済みの場合 -->
+                        <th:block sec:authorize="isAuthenticated()">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/mypage}">
+                                    <!-- GlobalModelAdvice が全画面にユーザー名を提供する -->
+                                    <span th:text="${loggedInUserName}">ユーザー</span>さん
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <!-- Spring Securityのログアウトは必ずPOSTで送信する（CSRF対策） -->
+                                <!-- Thymeleaf の th:action により CSRF トークンが自動付与される -->
+                                <form th:action="@{/logout}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-light btn-sm">
+                                        ログアウト
+                                    </button>
+                                </form>
+                            </li>
+                        </th:block>
+
+                        <!-- 未ログインの場合 -->
+                        <th:block sec:authorize="!isAuthenticated()">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/login}">ログイン</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/register}">会員登録</a>
+                            </li>
+                        </th:block>
+                    </ul>
+
+                    <form class="d-flex align-items-center flex-nowrap ms-lg-3 mt-3 mt-lg-0" th:action="@{/products}"
+                        method="get" role="search">
+                        <input class="form-control form-control-sm me-2" type="search" name="keyword"
+                            placeholder="商品を検索" />
+                        <button class="btn btn-outline-light btn-sm flex-shrink-0 text-nowrap" type="submit">
+                            検索
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 </body>
 
 </html>

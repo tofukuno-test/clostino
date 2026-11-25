@@ -46,3 +46,51 @@ main {
 .product-description {
   min-height: 3em;
 }
+/* ===========================================
+   カート数量編集ポップアップ
+   =========================================== */
+
+/* クリックで編集ポップアップを開く数量バッジ */
+.qty-display {
+  display: inline-block;
+  min-width: 2.5rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-white);
+  cursor: pointer;
+  user-select: none;
+}
+
+.qty-display:hover {
+  border-color: var(--accent-color);
+}
+
+/* 数量編集ポップアップ本体（初期は非表示・viewport 固定） */
+#qty-popup {
+  display: none;
+  position: fixed;
+  z-index: 1080;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  padding: 0.5rem;
+}
+
+.qty-popup-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.qty-popup-controls input[type="number"] {
+  min-width: 3rem;
+}
+
+.qty-popup-hint {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
