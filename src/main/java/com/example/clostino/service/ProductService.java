@@ -2,6 +2,8 @@ package com.example.clostino.service;
 
 import com.example.clostino.entity.Product;
 import com.example.clostino.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +21,31 @@ public class ProductService {
     }
 
     /**
-     * 全商品を取得する（読み取り専用）
+     * 全商品を取得する（ページネーション対応・読み取り専用）
+     */
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    /**
+     * 全商品を取得する（リスト形式・読み取り専用）
      */
     public List<Product> findAll() {
         return productRepository.findAll();
+    }
+
+    /**
+     * キーワードで商品を検索する（ページネーション対応・読み取り専用）
+     */
+    public Page<Product> searchProducts(String keyword, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(keyword, pageable);
+    }
+
+    /**
+     * キーワードで商品を検索する（リスト形式・読み取り専用）
+     */
+    public List<Product> searchProducts(String keyword) {
+        return productRepository.findByNameContainingIgnoreCase(keyword);
     }
 
     /**
