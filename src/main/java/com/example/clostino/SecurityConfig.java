@@ -28,7 +28,8 @@ public class SecurityConfig {
                     "/register", "/login",
                     "/error",
                     "/css/**", "/js/**", "/images/**",
-                    "/h2-console/**"
+                    "/h2-console/**",
+                    "/api/**"
                 ).permitAll()
                 // それ以外はログインが必要
                 .anyRequest().authenticated()
