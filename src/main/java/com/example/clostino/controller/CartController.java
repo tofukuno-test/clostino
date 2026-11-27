@@ -32,8 +32,7 @@ public class CartController {
         List<CartItemDisplay> items = new ArrayList<>();
         int total = 0;
         for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
-            Product product = productService.findById(entry.getKey())
-                    .orElseThrow(() -> new RuntimeException("商品が見つかりません: " + entry.getKey()));
+            Product product = productService.findById(entry.getKey());
             int qty = entry.getValue();
             items.add(new CartItemDisplay(product, qty));
             total += product.getPrice() * qty;
@@ -49,8 +48,7 @@ public class CartController {
                             HttpSession session, RedirectAttributes redirectAttributes) {
         if (quantity == null || quantity < 1) quantity = 1;
         // 商品を取得し、在庫をチェックする（ProductService#findById は「トランザクション管理を理解する」パートで実装済み）
-        Product product = productService.findById(productId)
-                .orElseThrow(() -> new RuntimeException("商品が見つかりません: " + productId));
+        Product product = productService.findById(productId);
         if (product.getStock() < quantity) {
             redirectAttributes.addFlashAttribute("error", "在庫が不足しています。");
             return "redirect:/products/" + productId;
@@ -82,8 +80,7 @@ public class CartController {
             return "redirect:/cart";
         }
         // 在庫数を超える数量は設定できない
-        Product product = productService.findById(productId)
-                .orElseThrow(() -> new RuntimeException("商品が見つかりません: " + productId));
+        Product product = productService.findById(productId);
         if (quantity > product.getStock()) {
             redirectAttributes.addFlashAttribute("error",
                     "「" + product.getName() + "」の在庫が不足しています。（在庫数: " + product.getStock() + "）");

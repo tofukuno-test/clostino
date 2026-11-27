@@ -265,8 +265,7 @@ public class CheckoutController {
         int subtotal = 0;
         for (Map.Entry<Long, Integer> entry : cart.entrySet()) {
             try {
-                Product product = productService.findById(entry.getKey())
-                        .orElseThrow(() -> new ResourceNotFoundException("商品", "ID", entry.getKey()));
+                Product product = productService.findById(entry.getKey());
                 int qty = entry.getValue();
                 items.add(new CartItemDisplay(product, qty));
                 subtotal += product.getPrice() * qty;

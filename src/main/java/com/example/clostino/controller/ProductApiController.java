@@ -34,8 +34,7 @@ public class ProductApiController {
 
     @GetMapping("/products/{id}")
     public Product getProductById(@PathVariable Long id) {
-        return productService.findById(id)
-                .orElseThrow(() -> new RuntimeException("商品が見つかりません: id=" + id));
+        return productService.findById(id);
     }
 
     @PostMapping("/products")
@@ -61,8 +60,7 @@ public class ProductApiController {
             @RequestBody ProductUpdateRequest request) {
 
         // 既存の商品を取得
-        Product product = productService.findById(id)
-                .orElseThrow(() -> new RuntimeException("商品が見つかりません: id=" + id));
+        Product product = productService.findById(id);
 
         // フィールドを更新
         product.setName(request.getName());

@@ -3,6 +3,8 @@ package com.example.clostino.controller;
 import com.example.clostino.entity.Product;
 import com.example.clostino.service.ProductService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ProductController {
+
+    // Loggerを取得（クラスごとに1つ用意）
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     private final ProductService productService;
 
@@ -39,6 +44,8 @@ public class ProductController {
             HttpSession session,
             Model model) {
 
+        logger.info("商品一覧ページにアクセスがありました");
+
         // 検索キーワードの決定ロジック
         String effectiveKeyword = determineKeyword(keyword, session);
 
@@ -48,6 +55,8 @@ public class ProductController {
         } else {
             productPage = productService.findAll(pageable);
         }
+
+        logger.debug("取得した商品数: {}", productPage.getNumberOfElements());
 
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("page", productPage);
@@ -60,18 +69,14 @@ public class ProductController {
      */
     private String determineKeyword(String requestKeyword, HttpSession session) {
         if (requestKeyword != null) {
-            // URLパラメータでキーワードが指定された場合
             if (requestKeyword.isEmpty()) {
-                // 空文字の場合はクリア（「クリア」ボタンが押された）
                 session.removeAttribute(SESSION_KEY_KEYWORD);
                 return null;
             } else {
-                // キーワードがある場合はセッションに保存
                 session.setAttribute(SESSION_KEY_KEYWORD, requestKeyword);
                 return requestKeyword;
             }
         } else {
-            // URLパラメータがない場合はセッションから復元
             return (String) session.getAttribute(SESSION_KEY_KEYWORD);
         }
     }
@@ -81,8 +86,8 @@ public class ProductController {
      */
     @GetMapping("/products/{id}")
     public String showProductDetail(@PathVariable Long id, Model model) {
-        Product product = productService.findById(id)
-                .orElseThrow(() -> new RuntimeException("商品が見つかりません: id=" + id));
+        logger.info("商品詳細ページにアクセスがありました: id={}", id);
+        Product product = productService.findById(id);
         model.addAttribute("product", product);
         return "product-detail";
     }

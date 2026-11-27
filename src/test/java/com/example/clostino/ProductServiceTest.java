@@ -1,6 +1,7 @@
 package com.example.clostino.service;
 
 import com.example.clostino.entity.Product;
+import com.example.clostino.exception.ResourceNotFoundException;
 import com.example.clostino.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -68,7 +69,7 @@ class ProductServiceTest {
             .thenReturn(Optional.of(testProduct));
 
         // When
-        Product result = productService.findById(1L).orElseThrow();
+        Product result = productService.findById(1L);
 
         // Then
         assertNotNull(result);
@@ -76,16 +77,17 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("存在しない商品IDの場合は空のOptionalを返す")
-    void findById_存在しない商品ID_空のOptionalを返す() {
+    @DisplayName("存在しない商品IDの場合はResourceNotFoundExceptionをスローする")
+    void findById_存在しない商品ID_ResourceNotFoundExceptionをスローする() {
         // Given
         when(productRepository.findById(999L))
             .thenReturn(Optional.empty());
 
-        // When
-        Optional<Product> result = productService.findById(999L);
-
-        // Then
-        assertTrue(result.isEmpty());
+        // When & Then
+        ResourceNotFoundException exception = assertThrows(
+            ResourceNotFoundException.class,
+            () -> productService.findById(999L)
+        );
+        assertEquals("商品ID 999 が見つかりません", exception.getMessage());
     }
 }

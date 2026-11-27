@@ -1,18 +1,22 @@
 package com.example.clostino.service;
 
 import com.example.clostino.entity.Product;
+import com.example.clostino.exception.ResourceNotFoundException;
 import com.example.clostino.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)  // クラスレベルでの設定
 public class ProductService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository productRepository;
 
@@ -49,10 +53,20 @@ public class ProductService {
     }
 
     /**
-     * IDで商品を取得する（読み取り専用）
+     * 指定されたIDの商品を取得する。
+     *
+     * @param id 商品ID
+     * @return 商品エンティティ
+     * @throws ResourceNotFoundException 商品が見つからない場合
      */
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Product findById(Long id) {
+        logger.debug("商品検索開始: id={}", id);
+
+        return productRepository.findById(id)
+            .orElseThrow(() -> {
+                logger.warn("商品が見つかりません: id={}", id);
+                return new ResourceNotFoundException("商品ID " + id + " が見つかりません");
+            });
     }
 
     /**
@@ -60,7 +74,10 @@ public class ProductService {
      */
     @Transactional  // メソッドレベルでの設定（readOnly = false）
     public Product saveProduct(Product product) {
-        return productRepository.save(product);
+        logger.info("商品を保存します: name={}", product.getName());
+        Product saved = productRepository.save(product);
+        logger.info("商品を保存しました: id={}", saved.getId());
+        return saved;
     }
 
     /**
