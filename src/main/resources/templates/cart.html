@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -119,6 +120,17 @@
           <a th:href="@{/products}" class="btn btn-outline-secondary"
             >買い物を続ける</a
           >
+        </div>
+
+        <!-- ログイン済みの場合 -->
+        <!-- Spring Security の sec:authorize でログイン状態を判定する -->
+        <div sec:authorize="isAuthenticated()" class="mt-4 d-grid">
+          <a th:href="@{/checkout}" class="btn btn-accent btn-lg">
+            <i class="bi bi-credit-card me-2"></i>注文手続きへ進む
+          </a>
+          <small class="text-muted text-center mt-2">
+            配送先入力 → 確認 → お支払い（モック）の流れで注文できます
+          </small>
         </div>
       </div>
     </div>

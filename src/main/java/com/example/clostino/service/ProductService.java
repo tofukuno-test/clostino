@@ -64,6 +64,17 @@ public class ProductService {
     }
 
     /**
+     * 商品を削除する（書き込みあり）
+     */
+    @Transactional
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new RuntimeException("商品が見つかりません: " + id);
+        }
+        productRepository.deleteById(id);
+    }
+
+    /**
      * 商品の在庫を更新する（書き込みあり）
      */
     @Transactional

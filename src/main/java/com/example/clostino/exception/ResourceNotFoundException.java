@@ -6,15 +6,22 @@ package com.example.clostino.exception;
  */
 public class ResourceNotFoundException extends RuntimeException {
 
+    /**
+     * エラーメッセージを指定して例外を作成する。
+     *
+     * @param message エラーメッセージ
+     */
     public ResourceNotFoundException(String message) {
         super(message);
     }
 
+    /**
+     * エラーメッセージと原因となる例外を指定して例外を作成する。
+     *
+     * @param message エラーメッセージ
+     * @param cause 原因となる例外
+     */
     public ResourceNotFoundException(String message, Throwable cause) {
         super(message, cause);
-    }
-
-    public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
-        super(String.format("%sが見つかりません（%s: %s）", resourceName, fieldName, fieldValue));
     }
 }
